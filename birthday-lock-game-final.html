@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algo especial para ti</title>
+<style>
+  /* =====================================================
+     PERSONALIZA TODO EN EL <script> DE ABAJO:
+     PIN_CODE, PIN_HINT, el texto del mensaje,
+     y el arreglo icons del juego.
+     ===================================================== */
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{
+    height:100%;
+    overflow:hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background:
+      radial-gradient(ellipse at 30% 15%, #4a2472 0%, transparent 55%),
+      radial-gradient(ellipse at 75% 85%, #2c1a5c 0%, transparent 55%),
+      linear-gradient(160deg, #1b1035, #3a1560);
+    color:#fff;
+  }
+
+  .sky{ position:fixed; inset:0; z-index:0; overflow:hidden; }
+  .star{ position:absolute; width:2px; height:2px; background:#fff; border-radius:50%; opacity:.6; animation: twinkle 3s ease-in-out infinite; }
+  @keyframes twinkle{ 0%,100%{opacity:.15;} 50%{opacity:.9;} }
+
+  .screen{
+    position:fixed; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    z-index:1;
+    opacity:1; visibility:visible;
+    transition: opacity .6s ease;
+  }
+  .screen.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
+
+  /* ---------------- PANTALLA DE BLOQUEO ---------------- */
+  #lock{
+    flex-direction:column;
+    gap:1.6rem;
+    padding:2rem;
+    text-align:center;
+  }
+  .clock{
+    font-size:clamp(2.6rem,9vw,3.6rem);
+    font-weight:300;
+    letter-spacing:.02em;
+  }
+  .date{
+    font-size:.95rem;
+    color:#cbb8f0;
+    margin-top:-.8rem;
+    text-transform:capitalize;
+  }
+  .lock-icon{
+    width:34px; height:34px;
+    margin: .4rem auto 0;
+    opacity:.85;
+  }
+  .dots{
+    display:flex; gap:16px; margin-top:.4rem;
+  }
+  .dot{
+    width:14px; height:14px;
+    border-radius:50%;
+    border:1.5px solid rgba(255,255,255,.7);
+    transition: background .15s ease, transform .15s ease;
+  }
+  .dot.filled{ background:#fff; transform:scale(1.1); }
+  .dots.shake{ animation: shake .4s ease; }
+  @keyframes shake{
+    0%,100%{ transform:translateX(0); }
+    20%{ transform:translateX(-10px); }
+    40%{ transform:translateX(10px); }
+    60%{ transform:translateX(-8px); }
+    80%{ transform:translateX(8px); }
+  }
+  .hint{
+    font-size:.82rem;
+    color:#a793d6;
+    min-height:1.2em;
+  }
+  .keypad{
+    display:grid;
+    grid-template-columns: repeat(3, 64px);
+    gap:16px;
+    margin-top:.6rem;
+  }
+  .key{
+    width:64px; height:64px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,.25);
+    background: rgba(255,255,255,.06);
+    color:#fff;
+    font-size:1.4rem;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background .12s ease, transform .1s ease;
+    user-select:none;
+  }
+  .key:active{ background: rgba(255,255,255,.22); transform:scale(.94); }
+  .key.ghost{ background:transparent; border:none; cursor:default; }
+  .key.ghost:active{ transform:none; background:transparent; }
+
+  /* ---------------- PANTALLA DEL JUEGO ---------------- */
+  #game{
+    flex-direction:column;
+    gap:1.1rem;
+    padding:1.5rem;
+  }
+  .game-title{
+    font-size:1.3rem;
+    letter-spacing:.02em;
+  }
+  .game-sub{
+    font-size:.85rem;
+    color:#cbb8f0;
+    margin-top:-.6rem;
+    text-align:center;
+  }
+  .board{
+    display:grid;
+    grid-template-columns: repeat(4, 70px);
+    grid-auto-rows:70px;
+    gap:10px;
+  }
+  .card{
+    position:relative;
+    width:70px; height:70px;
+    cursor:pointer;
+    perspective:600px;
+  }
+  .card-inner{
+    position:relative;
+    width:100%; height:100%;
+    transform-style:preserve-3d;
+    transition: transform .45s cubic-bezier(.3,.9,.3,1.1);
+  }
+  .card.flipped .card-inner, .card.matched .card-inner{
+    transform: rotateY(180deg);
+  }
+  .card-face{
+    position:absolute; inset:0;
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    backface-visibility:hidden;
+    font-size:1.8rem;
+  }
+  .card-back{
+    background: linear-gradient(155deg,#9a63f2,#5c28b8);
+    border:1px solid rgba(255,255,255,.25);
+  }
+  .card-back::after{
+    content:"?";
+    color:rgba(255,255,255,.55);
+    font-size:1.4rem;
+  }
+  .card-front{
+    background: linear-gradient(155deg,#fffaf0,#fff);
+    transform: rotateY(180deg);
+  }
+  .card.matched .card-front{
+    background: linear-gradient(155deg,#d9f7ee,#b7ecd9);
+  }
+  .stats{
+    display:flex; gap:1.6rem;
+    font-size:.85rem;
+    color:#e6d9ff;
+  }
+  .stats b{ color:#fff; }
+
+  /* ---------------- PANTALLA DEL MENSAJE ---------------- */
+  #message{
+    flex-direction:column;
+    gap:.6rem;
+    padding:2rem;
+    text-align:center;
+  }
+  .card-msg{
+    background: linear-gradient(165deg,#fffaf0,#fff);
+    color:#3a1560;
+    border-radius:18px;
+    padding:2.2rem 1.8rem 1.8rem;
+    max-width:360px;
+    box-shadow: 0 30px 70px rgba(10,0,30,.55);
+    transform: scale(.8);
+    opacity:0;
+    animation: pop-in .7s cubic-bezier(.2,.8,.25,1.2) forwards .2s;
+    max-height:80vh;
+    overflow-y:auto;
+  }
+  @keyframes pop-in{
+    to{ transform:scale(1); opacity:1; }
+  }
+  .card-msg h2{
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size:1.7rem;
+    margin-bottom:.7rem;
+    color:#5c28b8;
+  }
+  .card-msg p{
+    font-size:.98rem;
+    line-height:1.6;
+    color:#555;
+    text-align:left;
+    white-space:pre-line;
+  }
+  .card-msg .quote{
+    display:block;
+    margin-top:.9rem;
+    font-style:italic;
+    font-size:.9rem;
+    color:#7b3fe4;
+    text-align:center;
+  }
+  .card-msg .heart{
+    display:inline-block;
+    margin-top:.9rem;
+    font-size:1.4rem;
+    animation: pulse 1.2s infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ transform:scale(1); }
+    50%{ transform:scale(1.25); }
+  }
+
+  .confetti{
+    position:fixed; top:0; left:0;
+    width:8px; height:14px;
+    border-radius:2px;
+    z-index:6;
+    pointer-events:none;
+  }
+</style>
+</head>
+<body>
+
+<div class="sky" id="sky"></div>
+
+<!-- PANTALLA DE BLOQUEO -->
+<div class="screen" id="lock">
+  <div class="clock" id="clock">--:--</div>
+  <div class="date" id="dateline"></div>
+  <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5">
+    <rect x="5" y="11" width="14" height="9" rx="2"/>
+    <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+  </svg>
+  <div class="dots" id="dots">
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  </div>
+  <div class="hint" id="hint"></div>
+  <div class="keypad" id="keypad"></div>
+</div>
+
+<!-- PANTALLA DEL JUEGO -->
+<div class="screen hidden" id="game">
+  <div class="game-title">Encuentra cada pareja</div>
+  <div class="game-sub">Empareja todas las cartas para descubrir tu sorpresa</div>
+  <div class="stats"><span>Movimientos: <b id="moves">0</b></span><span>Emparejadas: <b id="matched">0</b>/8</span></div>
+  <div class="board" id="board"></div>
+</div>
+
+
+<div class="screen hidden" id="message">
+  <div class="card-msg">
+    <h2>¡Feliz cumpleaños!</h2>
+    <p>Lo lograste, lo resolviste, y hoy más que nunca mereces disfrutar cada instante de la hermosa celebración que te espera. ❤️
+
+Te deseo un nuevo año tan maravilloso como tú, lleno de amor, risas, momentos inolvidables y esas pequeñas sorpresas que hacen que la vida se sienta aún más especial.
+
+Y, sobre todo, deseo que nunca te falten motivos para sonreír, sueños por cumplir y alguien que te mire con la misma admiración y cariño con los que yo te miro. ✨
+
+Que este nuevo capítulo de tu vida esté lleno de magia, y que entre todos esos momentos bonitos haya muchos que podamos compartir juntos. Porque, sinceramente, tenerte en mi vida ya es una de las cosas más bonitas que podría desear. ❤️
+
+Feliz cumpleaños, preciosa. Que hoy y siempre la vida te devuelva todo el amor y la felicidad que mereces. 🥂💕
+</p>
+    <span class="quote">"Hay quienes pasan por la vida, y hay quienes se quedan a vivir en ella."</span>
+    <span class="heart">❤️</span>
+  </div>
+</div>
+
+<script>
+  /* =====================================================
+     PERSONALIZA AQUÍ
+     ===================================================== */
+  const PIN_CODE = "1009";
+  const PIN_HINT = "pista: el gran día, DDMM";
+  /* ===================================================== */
+
+  const sky = document.getElementById('sky');
+  for(let i=0;i<90;i++){
+    const s = document.createElement('div');
+    s.className='star';
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDelay = (Math.random()*3)+'s';
+    const size = Math.random()*2+1;
+    s.style.width = size+'px'; s.style.height = size+'px';
+    sky.appendChild(s);
+  }
+
+  function goTo(id){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+  }
+
+  document.getElementById('hint').textContent = PIN_HINT;
+  tickClock();
+  setInterval(tickClock, 15000);
+
+  function tickClock(){
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    document.getElementById('clock').textContent = `${h}:${m}`;
+    const opts = { weekday:'long', month:'long', day:'numeric' };
+    document.getElementById('dateline').textContent = now.toLocaleDateString('es-ES', opts);
+  }
+
+  const dotsEl = document.getElementById('dots');
+  const dotEls = dotsEl.querySelectorAll('.dot');
+  const keypad = document.getElementById('keypad');
+  let entered = "";
+
+  const layout = ['1','2','3','4','5','6','7','8','9','','0','back'];
+  layout.forEach(k=>{
+    const el = document.createElement('div');
+    if(k===''){
+      el.className='key ghost';
+    } else if(k==='back'){
+      el.className='key';
+      el.innerHTML = '&#9003;';
+      el.addEventListener('click', ()=>{
+        entered = entered.slice(0,-1);
+        renderDots();
+      });
+    } else {
+      el.className='key';
+      el.textContent = k;
+      el.addEventListener('click', ()=>{
+        if(entered.length >= PIN_CODE.length) return;
+        entered += k;
+        renderDots();
+        if(entered.length === PIN_CODE.length){
+          setTimeout(checkCode, 150);
+        }
+      });
+    }
+    keypad.appendChild(el);
+  });
+
+  function renderDots(){
+    dotEls.forEach((d,i)=>{
+      d.classList.toggle('filled', i < entered.length);
+    });
+  }
+
+  function checkCode(){
+    if(entered === PIN_CODE){
+      goTo('game');
+      initGame();
+    } else {
+      dotsEl.classList.add('shake');
+      setTimeout(()=>{
+        dotsEl.classList.remove('shake');
+        entered = "";
+        renderDots();
+      }, 400);
+    }
+  }
+
+  /* ---------------- JUEGO DE MEMORIA ---------------- */
+  const icons = ['🎂','🎈','🎁','⭐','🍰','🎉','🥂','💫'];
+  let board, firstCard, secondCard, lock=false, moves=0, matched=0;
+
+  function initGame(){
+    moves = 0; matched = 0; firstCard = null; secondCard = null; lock=false;
+    document.getElementById('moves').textContent = 0;
+    document.getElementById('matched').textContent = 0;
+    const deck = [...icons, ...icons]
+      .map(v => ({ v, k: Math.random() }))
+      .sort((a,b)=>a.k-b.k)
+      .map(o=>o.v);
+
+    board = document.getElementById('board');
+    board.innerHTML = '';
+    deck.forEach((icon)=>{
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.icon = icon;
+      card.innerHTML = `
+        <div class="card-inner">
+          <div class="card-face card-back"></div>
+          <div class="card-face card-front">${icon}</div>
+        </div>`;
+      card.addEventListener('click', ()=> flipCard(card));
+      board.appendChild(card);
+    });
+  }
+
+  function flipCard(card){
+    if(lock || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+    card.classList.add('flipped');
+
+    if(!firstCard){
+      firstCard = card;
+      return;
+    }
+    secondCard = card;
+    lock = true;
+    moves++;
+    document.getElementById('moves').textContent = moves;
+
+    if(firstCard.dataset.icon === secondCard.dataset.icon){
+      firstCard.classList.add('matched');
+      secondCard.classList.add('matched');
+      matched++;
+      document.getElementById('matched').textContent = matched;
+      resetTurn();
+      if(matched === icons.length){
+        setTimeout(winGame, 500);
+      }
+    } else {
+      setTimeout(()=>{
+        firstCard.classList.remove('flipped');
+        secondCard.classList.remove('flipped');
+        resetTurn();
+      }, 700);
+    }
+  }
+  function resetTurn(){
+    firstCard = null; secondCard = null; lock = false;
+  }
+
+  function winGame(){
+    goTo('message');
+    burstConfetti();
+    setTimeout(burstConfetti, 500);
+    setTimeout(burstConfetti, 1000);
+  }
+
+  const colors = ['#ff4f7b','#ffd76a','#7b3fe4','#4fd1c5','#ffffff','#ff9f43'];
+  function burstConfetti(){
+    const count = 60;
+    const originX = window.innerWidth/2;
+    const originY = window.innerHeight*0.25;
+    for(let i=0;i<count;i++){
+      const el = document.createElement('div');
+      el.className = 'confetti';
+      el.style.background = colors[Math.floor(Math.random()*colors.length)];
+      el.style.left = originX+'px';
+      el.style.top = originY+'px';
+      document.body.appendChild(el);
+
+      const angle = Math.random()*Math.PI*2;
+      const distance = 100 + Math.random()*260;
+      const dx = Math.cos(angle)*distance;
+      const dy = Math.sin(angle)*distance - 100;
+      const rot = (Math.random()*720)-360;
+      const dur = 900 + Math.random()*700;
+
+      el.animate([
+        { transform:'translate(0,0) rotate(0deg)', opacity:1 },
+        { transform:`translate(${dx*0.6}px, ${dy}px) rotate(${rot*0.5}deg)`, opacity:1, offset:.5 },
+        { transform:`translate(${dx}px, ${dy+380}px) rotate(${rot}deg)`, opacity:0 }
+      ], { duration: dur, easing:'cubic-bezier(.2,.7,.3,1)' });
+
+      setTimeout(()=> el.remove(), dur+50);
+    }
+  }
+</script>
+
+</body>
+</html>
