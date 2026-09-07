@@ -294,16 +294,16 @@
   #giftbox .box-wrap{ position:relative; }
   #giftbox .floor-shadow{
     position:absolute;
-    left:50%; bottom:-6%;
-    width:260px; height:40px;
+    left:50%; bottom:-8%;
+    width:320px; height:44px;
     transform:translateX(-50%);
-    background: radial-gradient(ellipse, rgba(0,0,0,.45), transparent 70%);
-    filter:blur(4px);
+    background: radial-gradient(ellipse, rgba(0,0,0,.5), transparent 70%);
+    filter:blur(5px);
     z-index:-1;
   }
   #giftbox .spotlight{
     position:absolute;
-    width:340px; height:340px;
+    width:400px; height:400px;
     left:50%; top:50%;
     transform:translate(-50%,-50%) rotate(0deg);
     background: conic-gradient(from 0deg, transparent, rgba(255,215,106,.4), transparent 30%);
@@ -312,25 +312,25 @@
     pointer-events:none;
     z-index:-1;
   }
-  #giftbox .box3d{ position:relative; width:200px; height:200px; transform-style:preserve-3d; }
+  #giftbox .box3d{ position:relative; width:220px; height:180px; transform-style:preserve-3d; }
   #giftbox .glow-ring{
     position:absolute;
     left:50%; top:50%;
-    width:280px; height:280px;
+    width:340px; height:340px;
     transform:translate(-50%,-50%);
     border-radius:50%;
     background: conic-gradient(from 0deg, #ff8fb3, #ffd76a, #7b3fe4, #4fd1c5, #ff8fb3);
-    filter:blur(26px);
-    opacity:.32;
+    filter:blur(30px);
+    opacity:.34;
     animation: ring-spin 8s linear infinite;
     z-index:-1;
   }
   @keyframes ring-spin{ from{ transform:translate(-50%,-50%) rotate(0deg); } to{ transform:translate(-50%,-50%) rotate(360deg); } }
   .gb-sweep{
     position:absolute; top:0; left:-60%;
-    width:40%; height:150px;
+    width:40%; height:180px;
     background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent);
-    transform: translateZ(101px) skewX(-20deg);
+    transform: translateZ(111px) skewX(-20deg);
     animation: sweep-move 3.4s ease-in-out infinite;
     pointer-events:none;
   }
@@ -339,26 +339,63 @@
     45%{ left:120%; }
     100%{ left:120%; }
   }
-  .gb-face{ position:absolute; background: linear-gradient(155deg, #c298ff, #6a34c9 55%, #4a1f96); }
-  .gb-front{ width:200px; height:150px; transform: translateZ(100px); }
-  .gb-back{ width:200px; height:150px; transform: translateZ(-100px) rotateY(180deg); }
-  .gb-left{ width:200px; height:150px; transform: translateX(-100px) rotateY(-90deg); }
-  .gb-right{ width:200px; height:150px; transform: translateX(100px) rotateY(90deg); }
+  .gb-face{
+    position:absolute;
+    background: linear-gradient(155deg, #e0c2ff 0%, #a463e8 38%, #6a2fc4 70%, #431a8f 100%);
+    box-shadow:
+      inset 22px 0 40px rgba(0,0,0,.28),
+      inset -10px 0 30px rgba(255,255,255,.10),
+      inset 0 18px 26px rgba(255,255,255,.16),
+      inset 0 -18px 30px rgba(0,0,0,.22);
+    border:1px solid rgba(255,255,255,.08);
+    overflow:hidden;
+  }
+  .gb-face::after{
+    /* gold ribbon band wrapping horizontally across every face */
+    content:"";
+    position:absolute; left:-2px; right:-2px; top:50%;
+    height:32px;
+    transform:translateY(-50%);
+    background: linear-gradient(180deg,#fff6da 0%, #ffe9a8 20%, #e8bf5c 50%, #c99a3a 80%, #a97b1e 100%);
+    box-shadow: inset 0 3px 5px rgba(255,255,255,.6), inset 0 -4px 8px rgba(0,0,0,.25), 0 2px 10px rgba(0,0,0,.3);
+  }
+  .gb-front{ width:220px; height:180px; transform: translateZ(110px); }
+  .gb-back{ width:220px; height:180px; transform: translateZ(-110px) rotateY(180deg); }
+  .gb-left{ width:220px; height:180px; transform: translateX(-110px) rotateY(-90deg); }
+  .gb-right{ width:220px; height:180px; transform: translateX(110px) rotateY(90deg); }
   .gb-ribbon{
-    position:absolute; left:50%; top:0; width:30px; height:150px;
-    transform: translateX(-15px) translateZ(0.5px);
-    background: linear-gradient(90deg,#a97b1e,#ffe9b0,#e8c15a,#a97b1e);
-    box-shadow: 0 0 14px rgba(255,215,106,.35);
+    position:absolute; left:50%; top:0; width:36px; height:180px;
+    transform: translateX(-18px) translateZ(0.5px);
+    background: linear-gradient(90deg,#a97b1e,#f5da8e 35%,#fff6da 50%,#f5da8e 65%,#a97b1e);
+    box-shadow: 0 0 16px rgba(255,215,106,.4), inset 4px 0 6px rgba(0,0,0,.15), inset -4px 0 6px rgba(0,0,0,.15);
+    z-index:2;
   }
   .gb-lid{
-    position:absolute; width:222px; height:42px; left:-11px; top:-42px;
-    background: linear-gradient(155deg,#fff2d4,#ffdb8f 55%,#c99a3a);
-    border-radius:5px;
+    position:absolute; width:244px; height:48px; left:-12px; top:-48px;
+    background: linear-gradient(160deg,#fffaf0 0%,#ffe9a8 45%,#e0b45a 80%,#c99a3a 100%);
+    border-radius:8px 8px 3px 3px;
     transform-origin: 50% 100%;
-    box-shadow: 0 10px 24px rgba(0,0,0,.35), inset 0 2px 4px rgba(255,255,255,.5);
+    box-shadow: 0 14px 30px rgba(0,0,0,.4), inset 0 3px 5px rgba(255,255,255,.7), inset 0 -6px 10px rgba(160,110,20,.35);
+    overflow:visible;
   }
+  .gb-lid::before{
+    /* ribbon strip continuing across the lid, meeting the box ribbon when closed */
+    content:"";
+    position:absolute; left:50%; top:0; bottom:0; width:40px;
+    transform:translateX(-50%);
+    background: linear-gradient(90deg,#a97b1e,#f5da8e 35%,#fff6da 50%,#f5da8e 65%,#a97b1e);
+    box-shadow: inset 4px 0 6px rgba(0,0,0,.15), inset -4px 0 6px rgba(0,0,0,.15);
+  }
+  .gb-bow{
+    position:absolute; left:50%; top:-30px;
+    width:110px; height:56px;
+    transform:translateX(-50%);
+    z-index:3;
+    filter: drop-shadow(0 6px 8px rgba(0,0,0,.35));
+  }
+  .gb-bow svg{ width:100%; height:100%; overflow:visible; }
   .gb-glow-burst{
-    position:absolute; left:50%; top:10%;
+    position:absolute; left:50%; top:6%;
     width:10px; height:10px;
     background:#fff;
     border-radius:50%;
@@ -375,7 +412,7 @@
     position:absolute;
     left:50%; bottom:0;
     width:120px; height:150px;
-    transform: translate(-50%, 40px) translateZ(140px) scale(.7);
+    transform: translate(-50%, 40px) translateZ(112px) scale(.7);
     opacity:0;
     transform-origin:50% 100%;
     pointer-events:none;
@@ -384,8 +421,8 @@
   .cutie svg{ width:100%; height:100%; overflow:visible; }
   .cutie.bounce{ animation: cutie-bounce 1.8s ease-in-out infinite; }
   @keyframes cutie-bounce{
-    0%,100%{ transform: translate(-50%, 0) translateZ(140px) scale(1) rotate(0deg); }
-    50%{ transform: translate(-50%, -8px) translateZ(140px) scale(1) rotate(-2deg); }
+    0%,100%{ transform: translate(-50%, 0) translateZ(112px) scale(1) rotate(0deg); }
+    50%{ transform: translate(-50%, -8px) translateZ(112px) scale(1) rotate(-2deg); }
   }
   .cutie .heart-glow{
     transform-origin:50% 50%;
@@ -580,6 +617,18 @@
     position:relative; z-index:1; text-align:center; padding:3.5rem 1rem 4.5rem;
     color:#b39fd6; font-size:.78rem; letter-spacing:.12em; text-transform:uppercase; font-weight:300;
   }
+
+  .sound-toggle{
+    position:fixed; top:16px; right:16px; z-index:90;
+    width:42px; height:42px; border-radius:50%;
+    background: rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.22);
+    backdrop-filter: blur(8px);
+    display:flex; align-items:center; justify-content:center;
+    transition: background .15s ease, transform .12s ease;
+  }
+  .sound-toggle:active{ transform:scale(.9); }
+  .sound-toggle svg{ width:20px; height:20px; pointer-events:none; }
 </style>
 </head>
 <body>
@@ -592,6 +641,18 @@
 <div class="progress-bar" id="progressBar"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="cursor-core" id="cursorCore"></div>
+<button class="sound-toggle" id="soundToggle" aria-label="Silenciar sonido">
+  <svg id="soundIconOn" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 9v6h4l5 5V4L8 9H4z"/>
+    <path d="M16.2 8.8a5 5 0 0 1 0 6.4"/>
+    <path d="M18.8 6.2a8.5 8.5 0 0 1 0 11.6"/>
+  </svg>
+  <svg id="soundIconOff" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+    <path d="M4 9v6h4l5 5V4L8 9H4z"/>
+    <path d="M16.5 9.5l5.5 5"/>
+    <path d="M22 9.5l-5.5 5"/>
+  </svg>
+</button>
 
 <!-- GATE 1: LOCK SCREEN -->
 <div class="gate" id="lockGate">
@@ -647,9 +708,35 @@
         <div class="gb-face gb-left"></div>
         <div class="gb-face gb-right"></div>
         <div class="gb-sweep"></div>
-        <div class="gb-ribbon" style="transform: translateX(-14px) translateZ(100.5px);"></div>
-        <div class="gb-ribbon" style="transform: translateX(-14px) translateZ(-100.5px) rotateY(180deg);"></div>
-        <div class="gb-lid" id="gbLid"></div>
+        <div class="gb-ribbon" style="transform: translateX(-18px) translateZ(110.5px);"></div>
+        <div class="gb-ribbon" style="transform: translateX(-18px) translateZ(-110.5px) rotateY(180deg);"></div>
+        <div class="gb-lid" id="gbLid">
+          <div class="gb-bow">
+            <svg viewBox="0 0 110 60">
+              <defs>
+                <linearGradient id="bowGold" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#fff6da"/>
+                  <stop offset="45%" stop-color="#ffe08a"/>
+                  <stop offset="100%" stop-color="#c99a3a"/>
+                </linearGradient>
+                <linearGradient id="bowGoldDark" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ffe9a8"/>
+                  <stop offset="100%" stop-color="#a97b1e"/>
+                </linearGradient>
+              </defs>
+              <!-- tails -->
+              <path d="M50 32 L38 58 L55 46 Z" fill="url(#bowGoldDark)" stroke="#8a6218" stroke-width="1"/>
+              <path d="M60 32 L72 58 L55 46 Z" fill="url(#bowGoldDark)" stroke="#8a6218" stroke-width="1"/>
+              <!-- left loop -->
+              <path d="M55 30 C 30 6, 4 8, 8 26 C 11 42, 34 40, 55 30 Z" fill="url(#bowGold)" stroke="#a97b1e" stroke-width="1.5"/>
+              <!-- right loop -->
+              <path d="M55 30 C 80 6, 106 8, 102 26 C 99 42, 76 40, 55 30 Z" fill="url(#bowGold)" stroke="#a97b1e" stroke-width="1.5"/>
+              <!-- knot -->
+              <circle cx="55" cy="30" r="11" fill="url(#bowGold)" stroke="#a97b1e" stroke-width="1.5"/>
+              <ellipse cx="51" cy="26" rx="3.5" ry="5" fill="rgba(255,255,255,.6)"/>
+            </svg>
+          </div>
+        </div>
         <div class="gb-glow-burst" id="gbBurst"></div>
         <div class="cutie" id="cutie">
           <div class="cutie-bubble" id="cutieBubble">¡Feliz Cumpleaños!</div>
@@ -735,9 +822,122 @@ Feliz cumpleaños, preciosa. Que hoy y siempre la vida te devuelva todo el amor 
 
 <script>
   /* =====================================================
-     PERSONALIZA AQUÍ
+     SOUND ENGINE — synthesized with Web Audio API,
+     no external files needed.
      ===================================================== */
-  const PIN_CODE = "1009";
+  let soundEnabled = true;
+  let audioCtx = null;
+  let masterGain = null;
+
+  function ensureAudio(){
+    if(audioCtx) return;
+    try{
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      masterGain = audioCtx.createGain();
+      masterGain.gain.value = soundEnabled ? 0.85 : 0;
+      masterGain.connect(audioCtx.destination);
+    }catch(e){ audioCtx = null; }
+  }
+  function resumeAudio(){
+    if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  }
+
+  function tone(freq, start, dur, type, peak){
+    if(!audioCtx) return;
+    type = type || 'sine'; peak = peak==null ? 0.22 : peak;
+    const t0 = audioCtx.currentTime + start;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, t0);
+    gain.gain.setValueAtTime(0, t0);
+    gain.gain.linearRampToValueAtTime(peak, t0 + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+    osc.connect(gain); gain.connect(masterGain);
+    osc.start(t0); osc.stop(t0 + dur + 0.05);
+  }
+
+  function noiseBurst(start, dur, filterFreq, peak, filterType){
+    if(!audioCtx) return;
+    filterFreq = filterFreq || 2000; peak = peak==null ? 0.25 : peak; filterType = filterType || 'bandpass';
+    const t0 = audioCtx.currentTime + start;
+    const bufferSize = Math.max(1, Math.floor(audioCtx.sampleRate * dur));
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for(let i=0;i<bufferSize;i++) data[i] = (Math.random()*2-1) * (1 - i/bufferSize);
+    const src = audioCtx.createBufferSource();
+    src.buffer = buffer;
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = filterType;
+    filter.frequency.value = filterFreq;
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(peak, t0);
+    gain.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+    src.connect(filter); filter.connect(gain); gain.connect(masterGain);
+    src.start(t0);
+  }
+
+  function sfxKeyTick(){ ensureAudio(); resumeAudio(); tone(620, 0, 0.05, 'triangle', 0.12); }
+  function sfxClick(){ ensureAudio(); resumeAudio(); tone(880, 0, 0.06, 'sine', 0.15); }
+  function sfxSuccess(){
+    ensureAudio(); resumeAudio();
+    [523.25,659.25,783.99,1046.5].forEach((f,i)=> tone(f, i*0.09, 0.25, 'sine', 0.2));
+  }
+  function sfxError(){
+    ensureAudio(); resumeAudio();
+    tone(220, 0, 0.18, 'sawtooth', 0.16);
+    tone(180, 0.06, 0.22, 'sawtooth', 0.14);
+  }
+  function sfxFlip(){ ensureAudio(); resumeAudio(); tone(700, 0, 0.05, 'triangle', 0.1); }
+  function sfxMatch(){
+    ensureAudio(); resumeAudio();
+    tone(784, 0, 0.12, 'sine', 0.2);
+    tone(988, 0.08, 0.2, 'sine', 0.2);
+  }
+  function sfxMismatch(){ ensureAudio(); resumeAudio(); tone(240, 0, 0.14, 'sine', 0.12); }
+  function sfxWin(){
+    ensureAudio(); resumeAudio();
+    [523.25,659.25,783.99,1046.5,1318.5].forEach((f,i)=> tone(f, i*0.11, 0.3, 'sine', 0.22));
+  }
+  function sfxWhoosh(){
+    ensureAudio(); resumeAudio();
+    noiseBurst(0, 0.5, 1200, 0.22, 'bandpass');
+    tone(200, 0, 0.4, 'sine', 0.08);
+  }
+  function sfxPop(){
+    ensureAudio(); resumeAudio();
+    tone(1000, 0, 0.08, 'sine', 0.22);
+    noiseBurst(0, 0.15, 3000, 0.18, 'highpass');
+  }
+  function sfxCandle(){
+    ensureAudio(); resumeAudio();
+    noiseBurst(0, 0.18, 2500, 0.16, 'highpass');
+    tone(520, 0, 0.12, 'sine', 0.1);
+  }
+  function sfxFirework(){
+    ensureAudio(); resumeAudio();
+    noiseBurst(0, 0.3, 1800, 0.22, 'bandpass');
+    tone(150, 0, 0.3, 'sine', 0.1);
+  }
+  function sfxSparkle(){
+    ensureAudio(); resumeAudio();
+    [1046.5,1318.5,1568].forEach((f,i)=> tone(f, i*0.07, 0.2, 'sine', 0.14));
+  }
+
+  const soundToggle = document.getElementById('soundToggle');
+  const soundIconOn = document.getElementById('soundIconOn');
+  const soundIconOff = document.getElementById('soundIconOff');
+  soundToggle.addEventListener('click', ()=>{
+    ensureAudio();
+    soundEnabled = !soundEnabled;
+    soundIconOn.style.display = soundEnabled ? 'block' : 'none';
+    soundIconOff.style.display = soundEnabled ? 'none' : 'block';
+    if(masterGain) masterGain.gain.value = soundEnabled ? 0.85 : 0;
+    if(soundEnabled) sfxClick();
+  });
+</script>
+<script>
+  const PIN_CODE = "0910";
   const PIN_HINT = "pista: el gran día, DDMM";
   /* ===================================================== */
 
@@ -772,12 +972,13 @@ Feliz cumpleaños, preciosa. Que hoy y siempre la vida te devuelva todo el amor 
     } else if(k==='back'){
       el.className='g-key';
       el.innerHTML = '&#9003;';
-      el.addEventListener('click', ()=>{ gEntered = gEntered.slice(0,-1); gRenderDots(); });
+      el.addEventListener('click', ()=>{ sfxKeyTick(); gEntered = gEntered.slice(0,-1); gRenderDots(); });
     } else {
       el.className='g-key';
       el.textContent = k;
       el.addEventListener('click', ()=>{
         if(gEntered.length >= PIN_CODE.length) return;
+        sfxKeyTick();
         gEntered += k;
         gRenderDots();
         if(gEntered.length === PIN_CODE.length) setTimeout(gCheckCode, 150);
@@ -792,10 +993,12 @@ Feliz cumpleaños, preciosa. Que hoy y siempre la vida te devuelva todo el amor 
 
   function gCheckCode(){
     if(gEntered === PIN_CODE){
+      sfxSuccess();
       lockGate.classList.add('hidden');
       gameGate.classList.remove('hidden');
       gInitGame();
     } else {
+      sfxError();
       gDotsEl.classList.add('shake');
       setTimeout(()=>{ gDotsEl.classList.remove('shake'); gEntered = ""; gRenderDots(); }, 400);
     }
@@ -824,6 +1027,7 @@ Feliz cumpleaños, preciosa. Que hoy y siempre la vida te devuelva todo el amor 
 
   function gFlip(card){
     if(gLock || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+    sfxFlip();
     card.classList.add('flipped');
     if(!gFirst){ gFirst = card; return; }
     gSecond = card;
@@ -831,12 +1035,14 @@ Feliz cumpleaños, preciosa. Que hoy y siempre la vida te devuelva todo el amor 
     gMoves++;
     document.getElementById('gMoves').textContent = gMoves;
     if(gFirst.dataset.icon === gSecond.dataset.icon){
+      sfxMatch();
       gFirst.classList.add('matched'); gSecond.classList.add('matched');
       gMatched++;
       document.getElementById('gMatched').textContent = gMatched;
       gReset();
       if(gMatched === gIcons.length) setTimeout(gWin, 500);
     } else {
+      sfxMismatch();
       setTimeout(()=>{
         gFirst.classList.remove('flipped'); gSecond.classList.remove('flipped');
         gReset();
@@ -846,6 +1052,7 @@ Feliz cumpleaños, preciosa. Que hoy y siempre la vida te devuelva todo el amor 
   function gReset(){ gFirst=null; gSecond=null; gLock=false; }
 
   function gWin(){
+    sfxWin();
     gameGate.classList.add('hidden');
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
@@ -1089,6 +1296,7 @@ Feliz cumpleaños, preciosa. Que hoy y siempre la vida te devuelva todo el amor 
   const cutie = document.getElementById('cutie');
   const cakeScene = document.getElementById('cakeScene');
   const flames = document.querySelectorAll('.flame');
+  const flameLitState = Array.from(flames).map(()=> false);
   const sparkleHost = document.getElementById('sparkleHost');
   const finalCard = document.getElementById('finalCard');
   const finalGlow = document.getElementById('finalGlow');
@@ -1102,6 +1310,7 @@ Feliz cumpleaños, preciosa. Que hoy y siempre la vida te devuelva todo el amor 
 
   let confettiFired = false;
   let burstFired = false;
+  let sparkleFired = false;
   let sparkleTimer = null;
   const colors = ['#ff4f7b','#ffd76a','#7b3fe4','#4fd1c5','#ffffff','#ff9f43'];
 
@@ -1231,15 +1440,17 @@ Feliz cumpleaños, preciosa. Que hoy y siempre la vida te devuelva todo el amor 
     if(p2 > 0.05) kicker2.classList.add('show'); else kicker2.classList.remove('show');
     if(p2 > 0.5) caption2.classList.add('show'); else caption2.classList.remove('show');
 
-    const lidLift = p2 * 280;
-    const lidRotate = p2 * -120;
+    const lidLift = p2 * 300;
+    const lidRotate = p2 * -125;
     gbLid.style.transform = `translateY(${-lidLift}px) rotateX(${lidRotate}deg)`;
     const boxRotY = (p2 - 0.5) * 60 + mouseX*15;
-    boxScene.style.transform = `rotateX(${-14 + mouseY*8}deg) rotateY(${boxRotY}deg) scale(${1 + p2*0.18})`;
+    boxScene.style.transform = `rotateX(${-14 + mouseY*8}deg) rotateY(${boxRotY}deg) scale(${1 + p2*0.16})`;
     spotlight.style.transform = `translate(-50%,-50%) rotate(${p2*360}deg)`;
 
     if(p2 > 0.55 && !burstFired){
       burstFired = true;
+      sfxWhoosh();
+      sfxPop();
       gbBurst.classList.add('pop');
     }
     if(p2 < 0.5 && burstFired){
@@ -1257,9 +1468,15 @@ Feliz cumpleaños, preciosa. Que hoy y siempre la vida te devuelva todo el amor 
       cutie.style.transform = '';
     } else {
       cutie.classList.remove('bounce');
-      cutie.style.transform = `translate(-50%, ${40 + cutieRise}px) translateZ(140px) scale(${cutieScale}) rotate(${(1-cutieP)*10}deg)`;
+      cutie.style.transform = `translate(-50%, ${40 + cutieRise}px) translateZ(112px) scale(${cutieScale}) rotate(${(1-cutieP)*10}deg)`;
     }
-    if(p2 > 0.75) cutie.classList.add('sparkling'); else cutie.classList.remove('sparkling');
+    if(p2 > 0.75){
+      cutie.classList.add('sparkling');
+      if(!sparkleFired){ sparkleFired = true; sfxSparkle(); }
+    } else {
+      cutie.classList.remove('sparkling');
+      if(p2 < 0.6) sparkleFired = false;
+    }
 
     /* Cake */
     const p3 = sectionProgress(cakeSection);
@@ -1267,7 +1484,10 @@ Feliz cumpleaños, preciosa. Que hoy y siempre la vida te devuelva todo el amor 
     cakeScene.style.transform = `rotateX(${-12 + mouseY*6}deg) rotateY(${(p3-0.5)*28 + mouseX*10}deg)`;
     flames.forEach((f, i)=>{
       const threshold = 0.2 + i*0.25;
-      if(p3 >= threshold) f.classList.add('lit'); else f.classList.remove('lit');
+      const shouldBeLit = p3 >= threshold;
+      if(shouldBeLit && !flameLitState[i]){ flameLitState[i] = true; sfxCandle(); }
+      if(!shouldBeLit && flameLitState[i]) flameLitState[i] = false;
+      if(shouldBeLit) f.classList.add('lit'); else f.classList.remove('lit');
     });
 
     /* Finale */
@@ -1283,15 +1503,17 @@ Feliz cumpleaños, preciosa. Que hoy y siempre la vida te devuelva todo el amor 
 
     if(p4 > 0.9 && !confettiFired){
       confettiFired = true;
+      sfxWin();
       burstConfetti(true);
       riseHearts();
       spawnFirework(window.innerWidth*0.3, window.innerHeight*0.35);
       spawnFirework(window.innerWidth*0.7, window.innerHeight*0.3);
+      sfxFirework();
       setTimeout(()=>burstConfetti(false), 400);
-      setTimeout(()=>spawnFirework(window.innerWidth*0.5, window.innerHeight*0.25), 500);
+      setTimeout(()=>{ spawnFirework(window.innerWidth*0.5, window.innerHeight*0.25); sfxFirework(); }, 500);
       setTimeout(()=>burstConfetti(false), 900);
-      setTimeout(()=>spawnFirework(window.innerWidth*0.4, window.innerHeight*0.4), 1100);
-      setTimeout(()=>spawnFirework(window.innerWidth*0.6, window.innerHeight*0.32), 1600);
+      setTimeout(()=>{ spawnFirework(window.innerWidth*0.4, window.innerHeight*0.4); sfxFirework(); }, 1100);
+      setTimeout(()=>{ spawnFirework(window.innerWidth*0.6, window.innerHeight*0.32); sfxFirework(); }, 1600);
     }
   }
 
